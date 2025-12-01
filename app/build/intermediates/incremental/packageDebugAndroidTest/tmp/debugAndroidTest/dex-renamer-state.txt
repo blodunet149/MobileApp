@@ -1,0 +1,7 @@
+#Mon Dec 01 11:26:24 WIB 2025
+base.0=C\:\\Users\\Lenovo\\StudioProjects\\MobileApp\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeExtDexDebugAndroidTest\\classes.dex
+base.1=C\:\\Users\\Lenovo\\StudioProjects\\MobileApp\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeProjectDexDebugAndroidTest\\0\\classes.dex
+path.0=classes.dex
+path.1=0/classes.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex

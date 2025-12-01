@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/layout_form_activity.xml.flat",
+        "source": "com.example.mobileapp-main-32:/layout/form_activity.xml"
+    },
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.mobileapp-main-32:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.mobileapp-main-32:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/layout_activity_login.xml.flat",
+        "source": "com.example.mobileapp-main-32:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/layout_activity_profile.xml.flat",
+        "source": "com.example.mobileapp-main-32:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.example.mobileapp-merged_res-31:/layout_activity_dashboard.xml.flat",
+        "source": "com.example.mobileapp-main-32:/layout/activity_dashboard.xml"
+    }
+]

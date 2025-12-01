@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,6 +17,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,12 +56,12 @@ public class FormActivity extends AppCompatActivity {
 
     private void submitForm() {
         // Get values from input fields
-        String nama = editTextNama.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
-        String alamat = editTextAlamat.getText().toString().trim();
-        String nomorHP = editTextNomorHP.getText().toString().trim();
-        String kelas = editTextKelas.getText().toString().trim();
-        String catatan = editTextCatatan.getText().toString().trim();
+        final String nama = editTextNama.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
+        final String alamat = editTextAlamat.getText().toString().trim();
+        final String nomorHP = editTextNomorHP.getText().toString().trim();
+        final String kelas = editTextKelas.getText().toString().trim();
+        final String catatan = editTextCatatan.getText().toString().trim();
 
         // Validate input fields
         if (nama.isEmpty()) {
@@ -79,8 +82,33 @@ public class FormActivity extends AppCompatActivity {
             return;
         }
 
-        // Prepare data for Google Form submission
+        // Prepare data map
+        final Map<String, String> params = new HashMap<>();
+        params.put("entry.479274716", nama);
+        params.put("entry.1096621200", email);
+        params.put("entry.622641120", alamat);
+        params.put("entry.810302634", nomorHP);
+        params.put("entry.1188280880", kelas);
+        params.put("entry.1270704674", catatan);
+
+        // Base URL Google Form
         String url = "https://docs.google.com/forms/d/e/1FAIpQLScAf7G5x8Z5SO0UzICnKpV9PnVkl-k6uez-htkeftIfQfLinA/formResponse";
+
+        // --- DEBUGGING: Generate & Log Full URL ---
+        // Copy URL dari Logcat (tag: FormSubmit) dan coba buka di browser jika error 400 berlanjut
+        try {
+            StringBuilder debugUrl = new StringBuilder(url + "?");
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                debugUrl.append(entry.getKey())
+                        .append("=")
+                        .append(URLEncoder.encode(entry.getValue(), "UTF-8"))
+                        .append("&");
+            }
+            Log.d("FormSubmit", "URL UNTUK TESTING: " + debugUrl.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        // ------------------------------------------
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -88,8 +116,6 @@ public class FormActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("FormSubmit", "Response: " + response);
                         Toast.makeText(FormActivity.this, "Data berhasil dikirim!", Toast.LENGTH_SHORT).show();
-                        
-                        // Clear form fields after successful submission
                         clearFormFields();
                     }
                 },
@@ -97,23 +123,38 @@ public class FormActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("FormSubmit", "Error: " + error.toString());
-                        Toast.makeText(FormActivity.this, "Gagal mengirim data. Silakan coba lagi.", Toast.LENGTH_SHORT).show();
+                        String message = "Gagal mengirim data.";
+
+                        if (error.networkResponse != null) {
+                            message += " Kode: " + error.networkResponse.statusCode;
+                            Log.e("FormSubmit", "Status Code: " + error.networkResponse.statusCode);
+                            // Log response body from server for more details
+                            if (error.networkResponse.data != null) {
+                                try {
+                                    String body = new String(error.networkResponse.data, "UTF-8");
+                                    Log.e("FormSubmit", "Error Body: " + body);
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else if (error.getMessage() != null) {
+                            message += " " + error.getMessage();
+                        }
+
+                        Toast.makeText(FormActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("entry.479274716", nama);
-                params.put("entry.1096621200", email);
-                params.put("entry.622641120", alamat);
-                params.put("entry.810302634", nomorHP);
-                params.put("entry.1188280880", kelas);
-                params.put("entry.1270704674", catatan);
                 return params;
             }
         };
 
-        // Add request to queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         requestQueue.add(stringRequest);
     }
 
