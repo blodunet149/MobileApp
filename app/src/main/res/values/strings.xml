@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobile App</string>
+    <string name="login_title">Login</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="logout_button">Logout</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="profile_title">Profile</string>
+    <string name="welcome_message">Welcome!</string>
+    <string name="view_profile">View Profile</string>
+    <string name="go_to_dashboard">Go to Dashboard</string>
+    <string name="invalid_credentials">Invalid username or password</string>
+    <string name="login_success">Login successful!</string>
+</resources>
