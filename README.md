@@ -32,9 +32,21 @@ app/
 
 ## How to Run
 
+### Using Android Studio (Recommended)
 1. Open the project in Android Studio
 2. Build and run the application on an emulator or physical device
 3. Use any non-empty username and password to login
+
+### Using Command Line
+On Windows:
+```
+gradlew.bat build
+```
+
+On macOS/Linux:
+```
+./gradlew build
+```
 
 ## Notes
 
